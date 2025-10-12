@@ -1,2 +1,2 @@
 # project
-#this repository is for practicing github flow
+# i am keerthana currently crying and trying to understand git and github

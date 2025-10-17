@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
-import { View, Image, Dimensions } from 'react-native';
+import { View, Image, Dimensions, FlatList } from 'react-native';
 import Svg, { Polyline, Circle } from 'react-native-svg';
 import { colors } from '../../theme/colors';
+import ListItem from '../../components/ListItem';
 
 const sampleImage = { uri: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop' };
 
-export default function RouteDetailScreen({ route }) {
-  const { routeData } = route.params || {};
+export default function RouteDetailScreen({ route, navigation }) {
+  const { routeData, allRoutes = [] } = route.params || {};
   const width = Dimensions.get('window').width - 24;
   const height = Math.min(360, width * 0.9);
 
@@ -27,6 +28,33 @@ export default function RouteDetailScreen({ route }) {
             <Circle key={idx} cx={px * width} cy={py * height} r={4} fill={colors.green} />
           ))}
         </Svg>
+      </View>
+
+      {/* Other routes list */}
+      <View style={{ marginTop: 16, backgroundColor: colors.surface, borderRadius: 12, overflow: 'hidden', borderColor: colors.divider, borderWidth: 1 }}>
+        <FlatList
+          data={allRoutes.filter((r) => r.id !== routeData?.id)}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ListItem
+              title={`${item.name}, ${item.grade}`}
+              onPress={() =>
+                navigation.replace('RouteDetail', {
+                  title: `${item.name}, ${item.grade}`,
+                  routeData: item,
+                  allRoutes,
+                })
+              }
+            />
+          )}
+          ListHeaderComponent={
+            <View style={{ paddingHorizontal: 16, paddingVertical: 10, borderBottomColor: colors.divider, borderBottomWidth: 1 }}>
+              <View>
+                <Image accessibilityIgnoresInvertColors={true} style={{ width: 0, height: 0 }} />
+              </View>
+            </View>
+          }
+        />
       </View>
     </View>
   );

@@ -13,7 +13,13 @@ export default function RoutesScreen({ navigation, route }) {
         renderItem={({ item }) => (
           <ListItem
             title={`${item.name}, ${item.grade}`}
-            onPress={() => navigation.navigate('RouteDetail', { title: `${item.name}, ${item.grade}`, routeData: item })}
+            onPress={() =>
+              navigation.navigate('RouteDetail', {
+                title: `${item.name}, ${item.grade}`,
+                routeData: item,
+                allRoutes: routes,
+              })
+            }
           />
         )}
       />
